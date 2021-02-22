@@ -1,5 +1,5 @@
 const assert = require("assert");
-const OrbitsGenerator = require("../src");
+const OrbitsGenerator = require("../../src");
 
 
 describe(__filename, () => {
@@ -164,6 +164,60 @@ describe(__filename, () => {
 			}, {
 				name:    "Error",
 				message: "Property 'pluralName' of 'kinds.Island' should be string"
+			});
+		});
+
+		it("Frame not found error", () => {
+			assert.throws(()=>{
+				new OrbitsGenerator({
+					rules: {
+						kinds: {
+							Sea:    { root: true,  childs: ["Island"] },
+							Island: { root: false, pluralName: "Islands" }
+						}
+					}, validate: true
+				});
+			}, {
+				name:    "Error",
+				message: "Kind 'rules.kinds.Sea' has childs, but do not have required 'frame' definition"
+			});
+		});
+
+		it("Frame not valid error", () => {
+			assert.throws(()=>{
+				new OrbitsGenerator({
+					rules: {
+						kinds: {
+							Sea:    { root: true,  frame: 123, childs: ["Island"] },
+							Island: { root: false, pluralName: "Islands" }
+						}
+					}, validate: true
+				});
+			}, {
+				name:    "Error",
+				message: "Invalid frame definition of 'rules.kinds.Sea'"
+			});
+		});
+
+
+
+
+
+
+
+
+
+
+		it("Valid options", () => {
+			assert.doesNotThrow(()=>{
+				new OrbitsGenerator({
+					rules: {
+						kinds: {
+							Sea:    { root: true,  frame: "test", childs: ["Island"] },
+							Island: { root: false, pluralName: "Islands" }
+						}
+					}, validate: true
+				});
 			});
 		});
 

@@ -1,3 +1,5 @@
+const BaseClass = require("./BaseClass");
+const Frame = require("./Frame");
 
 class OrbitsGenerator {
 	
@@ -46,39 +48,76 @@ class OrbitsGenerator {
 				
 			}
 		}
+
+		// Validate frames
+		for(let kn of kind_names){
+			if(kinds[kn].hasOwnProperty("childs") && kinds[kn].childs.length > 0){
+				if(!kinds[kn].hasOwnProperty("frame"))
+					throw new Error(`Kind 'rules.kinds.${kn}' has childs, but do not have required 'frame' definition`);
+				if(!this.validateFrame(kinds[kn].frame))
+					throw new Error(`Invalid frame definition of 'rules.kinds.${kn}'`);
+			}
+		}
+
+	}
+
+	validateFrame(frame){
+		if(frame === "test") return true;
 	}
 
 	createClasses(rules){
-		class BaseClass {
-
-		}
 
 		const classes = {};
 
 		for(let kind_name in rules.kinds){
-			if( !/^[A-Z][a-zA-Z]*?$/.test(kind_name) ) 
+			if( !/^[A-Z][a-zA-Z]*?$/.test(kind_name) )
 				throw new Error(`Invalid kind name: '${kind_name}'`);
 
-			const createClass = new Function("BaseClass", "kind_rules", `
+			const kind_rules = rules.kinds[kind_name];
+
+			const KindClass = (new Function("BaseClass", "kind_rules", `
 				class ${kind_name} extends BaseClass {
 
 					constructor(options){
-						super()
+						super(options)
 					}
 
 					get rules() { return kind_rules }
 				}
 
 				return ${kind_name};
-			`);
+			`))(BaseClass, kind_rules);
 
-			classes[kind_name] = createClass(BaseClass, rules.kinds[kind_name]);
+			if(kind_rules.childs && kind_rules.childs.length){
+				KindClass.prototype.frame = new Frame(kind_rules.frame);
+			}
+
+			classes[kind_name] = KindClass;
+
+		}
+
+		for(let kind_name in rules.kinds){
+			if(rules.kinds[kind_name].root){
+				this[`create${kind_name}`] = this.createRootGetter(kind_name, classes[kind_name]);
+			}
+
+			if(rules.kinds[kind_name].childs){
+				for(let child_name of rules.kinds[kind_name].childs){
+					classes[kind_name].prototype[`get${rules.kinds[child_name].pluralName}`] = this.createChildsQueryGetter(child_name, classes[child_name]);
+				}
+			}
 		}
 
 
-
-
 		return classes;
+	}
+
+	createRootGetter(kind_name, KindClass){
+		return options => new KindClass(options);
+	}
+
+	createChildsQueryGetter(kind_name, KindClass){
+		return (...options) => new KindClass(...options);
 	}
 
 }

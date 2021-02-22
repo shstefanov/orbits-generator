@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha test/Rules.spec.js test/Classes.spec.js"
+    "test": "npm run test-basics && npm run test-frames",
+    "test-basics": "mocha test/basics/Rules.spec.js test/basics/Classes.spec.js test/basics/GetChildsMethods.spec.js",
+    "test-frames": "mocha test/frames/FramePresence.spec.js"
   },
   "devDependencies": {
     "mocha": "^8.1.3"

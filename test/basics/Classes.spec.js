@@ -1,9 +1,7 @@
 const assert = require("assert");
-const OrbitsGenerator = require("../src");
-
+const OrbitsGenerator = require("../../src");
 
 describe(__filename, () => {
-
 
 	describe("generator.classes", () => {
 		it("Has .classes attribute", () => {
@@ -11,10 +9,10 @@ describe(__filename, () => {
 				validate: true,
 				rules: {
 					kinds: {
-						Sea:    { root: true,  childs: ["Island"] },
-						Island: { root: false, pluralName: "Islands", childs: ["Rock", "Tree"] },
-						Rock:   { root: false, pluralName: "Rocks",   childs: [] },
-						Tree:   { root: false, pluralName: "Trees",   childs: [] },
+						Sea:    { root: true,  frame: "test", childs: ["Island"] },
+						Island: { pluralName: "Islands", frame: "test", childs: ["Rock", "Tree"] },
+						Rock:   { pluralName: "Rocks",   childs: [] },
+						Tree:   { pluralName: "Trees",   childs: [] },
 					}
 				}
 			});
@@ -25,7 +23,5 @@ describe(__filename, () => {
 
 		});
 	});
-
-
 
 });
