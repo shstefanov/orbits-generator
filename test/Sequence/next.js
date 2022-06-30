@@ -5,15 +5,15 @@ const Sea = require("../fixtures/Sea");
 
 describe("sequence.next", () => {
 
-	const sea = new Sea("SALT", {
-		size: 100,
-		depth: 10
-	});
+  const sea = new Sea("SALT", {
+    size: 100,
+    depth: 10
+  });
 
-	it("sequence.next() pulls fixed number from the pool", () => {
-		const sequence = sea.createSequence("islands");
-		const num = sequence.next(3);
-		equal(65, num);
-	});
+  it("sequence.next() pulls fixed number from the pool", () => {
+    const sequence = sea.createSequence("islands");
+    const num = sequence.next(3);
+    equal(65, num);
+  });
 
 });
