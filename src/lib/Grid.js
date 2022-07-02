@@ -5,17 +5,12 @@ class Grid {
   constructor({ bounds, gradient = [], wrap=[] }){
     this.bounds = bounds;
 
-    const biggest_axis_distance = Object.keys(bounds).reduce( (memo, key) => {
-      return Math.max(
-        memo,
-        math.divide(
-          this.bounds[key][1] - this.bounds[key][0],
-          2
-        )
-      )
+    const semi_diagonal_length = Object.keys(bounds).reduce( (memo, key) => {
+      const axis_r = math.divide( this.bounds[key][1] - this.bounds[key][0], 2 );
+      return memo + (axis_r * axis_r);
     }, 0);
 
-    this.m_unit = math.divide(biggest_axis_distance, 100);
+    this.m_unit = math.divide(math.sqrt(semi_diagonal_length), 100);
 
     this.gradient = gradient;
     this.wrap = wrap;
