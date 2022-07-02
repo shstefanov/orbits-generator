@@ -1,5 +1,70 @@
 const math = require("./math");
 
+function getAxisBase(x, step){
+  if( x < 0 ) x -= (step - 1);
+  return x - (x % step);
+}
+
+function arrayToPoint(axes, values){
+  const point = {};
+  for(let i = 0; i < axes.length; i++){
+    point[axes[i]] = values[i];
+  }
+  return point;
+}
+
+function fillBlocks(axes, block_size, min_block_point, max_block_point){
+  const dimmensions = axes.slice();
+  let blocks = [];
+  const axis = dimmensions.shift();
+
+  if(dimmensions.length){
+    for(let i = min_block_point[axis]; i <= max_block_point[axis]; i += block_size) {
+      for(let b of fillBlocks(dimmensions, block_size, min_block_point, max_block_point)) {
+        b[axis] = i;
+        blocks.push(b);
+      }
+    }
+  }
+  else {
+    for(let i = min_block_point[axis]; i <= max_block_point[axis]; i += block_size){
+      blocks.push({ [axis]: i });
+    }
+  }
+
+  return blocks;
+}
+
+function blockBounds(axes, block_size, block){
+  const dimmensions = axes.slice();
+  const axis = dimmensions.shift();
+  const points = [];
+
+  if(dimmensions.length){
+    const p = blockBounds(dimmensions, block_size, block);
+    points.push(...p.map( p => ({...p, [axis]: block[axis] }) ));
+    points.push(...p.map( p => ({...p, [axis]: block[axis] + (block_size - 1) }) ));
+  }
+  else {
+    points.push(
+      { [axis]: block[axis] },
+      { [axis]: block[axis] + (block_size - 1) }
+    );
+  }
+
+  return points;
+}
+
+
+function inRadius(axes, target, origin, radius){
+  let r_sq = radius * radius;
+  let d_sq = 0;
+  for (let axis of axes){
+    a_dist = target[axis] - origin[axis];
+    d_sq += (a_dist * a_dist);
+  }
+  return d_sq <= r_sq;
+}
 
 class Grid {
   constructor({ bounds, gradient = [], wrap=[] }){
@@ -128,6 +193,51 @@ class Grid {
     return value;
   }
 
+
+  map({ block_size, point, radius, blockSequence, sequenceValue, createItem }){
+    // Determine bounding box in blocks
+    // get 2 points for the box
+    const axes = Object.keys(this.bounds);
+
+    const min_block_values = axes.map( axis => getAxisBase((point[axis] || 0) - radius, block_size) );
+    const max_block_values = axes.map( axis => getAxisBase((point[axis] || 0) + radius, block_size) );
+
+    // Transform array values to points
+    const min_block_point = arrayToPoint(axes, min_block_values);
+    const max_block_point = arrayToPoint(axes, max_block_values);
+
+    const blocks = fillBlocks(axes, block_size, min_block_point, max_block_point)
+    // Filter blocks that are outside radius
+      .filter( block => blockBounds(axes, block_size, block).some( p => inRadius( axes, p, point, radius )));
+
+    const result = [];
+
+    for(let block of blocks){
+
+      const sequence = blockSequence(block);
+
+      const block_bounds = blockBounds(axes, block_size, block);
+      const block_begin  = block_bounds[0];
+      const block_end    = block_bounds.pop();
+
+      const points = fillBlocks(axes, 1, block_begin, block_end);
+
+      for(let p of points){
+        // The entire block needs to be generated first, then
+        // decide if we should process the values
+        const gv = this.gradientValueAt(p);
+        const sv = sequenceValue(sequence);
+        if(this.in(p) && inRadius(axes, p, point, radius)){
+          const item = createItem(p, gv, sv);
+          if(item) result.push(item);
+        }
+      }
+
+    }
+
+    return result;
+
+  }
 
 }
 
