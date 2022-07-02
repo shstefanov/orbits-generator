@@ -95,7 +95,10 @@ class Grid {
         }
       }
 
-      if(left === right) value += g.values[g_waypoints[left]];
+      if(left === right) {
+        value += g.values[g_waypoints[left]];
+        continue;
+      }
 
       const steps = [];
       const wp_begin = g_waypoints[left];
