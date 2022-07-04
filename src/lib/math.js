@@ -68,6 +68,14 @@ const math = module.exports = {
       b=ii(b,c,d,a,x[i+ 9],21, -343485551);a=ad(a,olda);b=ad(b,oldb);c=ad(c,oldc);d=ad(d,oldd);
     }
     return rh(a)+rh(b)+rh(c)+rh(d);
+  },
+
+  // Returns the beginning value of block by given block_size
+  // and axis value n
+  getBlockBase: function(n, block_size){
+    if( n < 0 ) n -= (block_size - 1);
+    return n - (n % block_size);
   }
+
 
 };

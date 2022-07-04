@@ -1,10 +1,5 @@
 const math = require("./math");
 
-function getAxisBase(x, step){
-  if( x < 0 ) x -= (step - 1);
-  return x - (x % step);
-}
-
 function arrayToPoint(axes, values){
   const point = {};
   for(let i = 0; i < axes.length; i++){
@@ -67,6 +62,7 @@ function inRadius(axes, target, origin, radius){
 }
 
 class Grid {
+
   constructor({ bounds, gradient = [], wrap=[] }){
     this.bounds = bounds;
 
@@ -99,7 +95,6 @@ class Grid {
     }
     return true;
   }
-
 
   gradientValueAt(p){
     let value = 0;
@@ -193,14 +188,13 @@ class Grid {
     return value;
   }
 
-
   map({ block_size, point, radius, blockSequence, sequenceValue, createItem }){
     // Determine bounding box in blocks
     // get 2 points for the box
     const axes = Object.keys(this.bounds);
 
-    const min_block_values = axes.map( axis => getAxisBase((point[axis] || 0) - radius, block_size) );
-    const max_block_values = axes.map( axis => getAxisBase((point[axis] || 0) + radius, block_size) );
+    const min_block_values = axes.map( axis => math.getBlockBase((point[axis] || 0) - radius, block_size) );
+    const max_block_values = axes.map( axis => math.getBlockBase((point[axis] || 0) + radius, block_size) );
 
     // Transform array values to points
     const min_block_point = arrayToPoint(axes, min_block_values);
