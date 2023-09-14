@@ -50,7 +50,6 @@ function blockBounds(axes, block_size, block){
   return points;
 }
 
-
 function inRadius(axes, target, origin, radius){
   let r_sq = radius * radius;
   let d_sq = 0;
@@ -101,30 +100,51 @@ class Grid {
 
     const { bounds, gradient, m_unit, wrap } = this;
 
+    // Processing one or more gradient points
+    // Each gradient object has:
+    // {
+    //   axis:   ["x"],                       // which axes are affected
+    //   origin: { x: 1400000 },              // the origiin point where gradient starts
+    
+
+    //   // Values: keys are from 0 to 100 in m_units (1/100) of biggest dimmension
+    //   // values are number to add
+    //   values: { 0:  100, 10: 90, 40: 0 },
+    // }
     for(let g of gradient){
       // 1. Find distance squared
       let d_sq = 0;
+
+      // Computing only gradient axes, the rest axes of grid are skipped
       for(let a of g.axis) {
 
-        let origin_poition = g.origin[a];
+        let origin_position = g.origin[a];
 
+        // If the computed axis is marked as wrapped
+        // for example if represents cyllinder where only x axis is wrapped
+        // the distance to origin may be shorter via nearest edge
         if(wrap && wrap.indexOf(a) > -1){
           const axis_length = bounds[a][1] - bounds[a][0];
-          origin_poition = [
-            origin_poition - axis_length,
-            origin_poition,
-            origin_poition + axis_length,
+          // Add 2 more origin positions, shifted left 
+          // and shifted right with axis length
+          origin_position = [
+            origin_position - axis_length,
+            origin_position,
+            origin_position + axis_length,
           ].sort( (o1, o2) => {
+            // Sort them by distance to point
             const ds1 = (p[a] - o1) * ((p[a] - o1));
             const ds2 = (p[a] - o2) * ((p[a] - o2));
             return ds1 - ds2;
-          })[0];
+          })[0];  // And get first, which is shortest distance
         }
-        d_sq += (p[a] - origin_poition) * ((p[a] - origin_poition));
+
+        // And add distance squared for this axis to total distance squared
+        d_sq += (p[a] - origin_position) * ((p[a] - origin_position));
       }
 
       // 2. find corresponding gradient bounds
-      // map g.values.keys -> [ key * m_unit ^ 2 ]
+      // map g.values.keys -> [ ( key * m_unit ) ^ 2 ]
 
       const g_waypoints = Object.keys(g.values)
         .map( n => parseInt(n) )

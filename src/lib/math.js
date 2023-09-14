@@ -26,6 +26,15 @@ const math = module.exports = {
     }
   },
 
+  distanceSquared(p1, p2){
+    let result = 0;
+    for(let axis in p1){
+      const diff = p2[axis] - p2[axis];
+      result += diff * diff;
+    }
+    return result;
+  },
+
   // Found it here: https://stackoverflow.com/questions/1655769/fastest-md5-implementation-in-javascript
   md5: function(inputString) {
     var hc="0123456789abcdef";
