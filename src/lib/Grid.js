@@ -157,7 +157,7 @@ class Grid {
         .sort( (a, b) => a - b);
 
       const gm_units_sq = g_waypoints.map( n => {
-        const sq_value = ((n * m_unit) * (n * m_unit)) ; // ?? * g.axis.length
+        const sq_value = ((n * m_unit) * (n * m_unit)); // ?? * g.axis.length
         return sq_value;
       });
 
@@ -189,32 +189,44 @@ class Grid {
 
       if(left === right) {
         value += g.values[g_waypoints[left]];
-        continue;
+        // continue;
       }
+      else {
+        const wp_begin = g_waypoints[left];  // 12
+        const wp_end = g_waypoints[right];   // 13
+        const wp_steps = wp_end - wp_begin;  // 1
 
-      const wp_begin = g_waypoints[left];  // 12
-      const wp_end = g_waypoints[right];   // 13
-      const wp_steps = wp_end - wp_begin;  // 1
+        const val_begin = g.values[wp_begin]; // 100
+        const val_end   = g.values[wp_end];   // 0
 
-      const val_begin = g.values[wp_begin]; // 100
-      const val_end   = g.values[wp_end];   // 0
+        const val_gap = val_end - val_begin; // -100
+        const val_step = math.divide(val_gap, wp_steps);  // 100 / 1 = 100
 
-      const val_gap = val_end - val_begin; // -100
-      const val_step = math.divide(val_gap, wp_steps);  // 100 / 1 = 100
-
-      let count = 0;
-      let match = 0;
-      for(let i = wp_begin; i < wp_end; i++){ // 12 - 13
-        count++;
-        const step_sq = (i * m_unit) * (i * m_unit) ; // ??? * g.axis.length
-        const v = val_begin + (count * val_step );
-        if(step_sq >= d_sq){
-          match = v;
-          break;
+        let count = 0;
+        let match = 0;
+        for(let i = wp_begin; i < wp_end; i++){ // 12 - 13
+          count++;
+          const step_sq = (i * m_unit) * (i * m_unit) ; // ??? * g.axis.length
+          const v = val_begin + (count * val_step );
+          if(step_sq >= d_sq){
+            match = v;
+            break;
+          }
+          match = v; // fallback
         }
-        match = v; // fallback
+
+        value += match;
       }
-      value += match;
+
+      if(g.hasOwnProperty("end") && g.end){
+        
+        // It has "end: true", so it is a complete shape
+        if(value > 0) return value;
+
+        // Reset - will match next meaningfull group
+        else value = 0;
+      }
+     
 
     }
 
