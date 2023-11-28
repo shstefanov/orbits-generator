@@ -63,17 +63,23 @@ function inRadius(axes, target, origin, radius){
 class Grid {
 
   constructor({ bounds, gradient = [], wrap=[] }){
-    this.bounds = bounds;
-
-    const semi_diagonal_length = Object.keys(bounds).reduce( (memo, key) => {
-      const axis_r = math.divide( this.bounds[key][1] - this.bounds[key][0], 2 );
-      return memo + (axis_r * axis_r);
-    }, 0);
-
-    this.m_unit = math.divide(math.sqrt(semi_diagonal_length), 100);
-
+    
+    this.bounds   = bounds;
     this.gradient = gradient;
-    this.wrap = wrap;
+    this.wrap     = wrap;
+    
+    // Computing m_unit - virtual unit, representing approximation of
+    // 1/100 of radius of bounding sphere of the box
+    // const semi_diagonal_length = Object.keys(bounds).reduce( (memo, key) => {
+    //   const axis_r = math.divide( this.bounds[key][1] - this.bounds[key][0], 2 );
+    //   return memo + (axis_r * axis_r);
+    // }, 0);
+    // const old_m_unit = math.divide(math.sqrt(semi_diagonal_length), 100);
+
+    this.m_unit = Math.max(...Object.keys(this.bounds).map( d => {
+      return math.divide(  this.bounds[d][1] - this.bounds[d][0], 200);
+    }));
+
   }
 
   get bounds(){ return this._bounds; }
@@ -150,24 +156,29 @@ class Grid {
         .map( n => parseInt(n) )
         .sort( (a, b) => a - b);
 
-
       const gm_units_sq = g_waypoints.map( n => {
-        const sq_value = (n * m_unit) * (n * m_unit);
+        const sq_value = ((n * m_unit) * (n * m_unit)) ; // ?? * g.axis.length
         return sq_value;
       });
 
       let left = 0, right = 0;
 
+      // d_sq - 45484
+      // [0, 432, 507]
       for(let i = 0; i < gm_units_sq.length; i++){
         const current = gm_units_sq[i];
         const next = gm_units_sq[i + 1];
+        
+        // If last gradient breakpoint
         if(typeof next === "undefined" && d_sq >= current){
           left = i; right = i;
           break;
         }
+        
+        // Between breakpoints
         else if(d_sq >= current && d_sq < next){
-          left = i;
-          right = typeof next === "undefined" ? i : i + 1;
+          left  = i;
+          right = i + 1;
           break;
         }
         else{
@@ -175,33 +186,35 @@ class Grid {
         }
       }
 
+
       if(left === right) {
         value += g.values[g_waypoints[left]];
         continue;
       }
 
-      const steps = [];
-      const wp_begin = g_waypoints[left];
-      const wp_end = g_waypoints[right];
-      const wp_steps = wp_end - wp_begin;
+      const wp_begin = g_waypoints[left];  // 12
+      const wp_end = g_waypoints[right];   // 13
+      const wp_steps = wp_end - wp_begin;  // 1
 
-      const val_begin = g.values[wp_begin];
-      const val_end   = g.values[wp_end];
+      const val_begin = g.values[wp_begin]; // 100
+      const val_end   = g.values[wp_end];   // 0
 
-      const val_gap = val_end - val_begin;
-      const val_step = math.divide(val_gap, wp_steps);
+      const val_gap = val_end - val_begin; // -100
+      const val_step = math.divide(val_gap, wp_steps);  // 100 / 1 = 100
 
       let count = 0;
-      for(let i = wp_begin; i < wp_end; i++){
+      let match = 0;
+      for(let i = wp_begin; i < wp_end; i++){ // 12 - 13
         count++;
-        const step_sq = (i * m_unit) * (i * m_unit);
+        const step_sq = (i * m_unit) * (i * m_unit) ; // ??? * g.axis.length
+        const v = val_begin + (count * val_step );
         if(step_sq >= d_sq){
-          const v = val_begin + (count * val_step );
-          value += v;
+          match = v;
           break;
         }
-        steps.push( (i * m_unit) * (i * m_unit) );
+        match = v; // fallback
       }
+      value += match;
 
     }
 
