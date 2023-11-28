@@ -67,7 +67,7 @@ class Grid {
     this.bounds   = bounds;
     this.gradient = gradient;
     this.wrap     = wrap;
-    
+
     // Computing m_unit - virtual unit, representing approximation of
     // 1/100 of radius of bounding sphere of the box
     // const semi_diagonal_length = Object.keys(bounds).reduce( (memo, key) => {
@@ -124,7 +124,7 @@ class Grid {
       // Computing only gradient axes, the rest axes of grid are skipped
       for(let a of g.axis) {
 
-        let origin_position = g.origin[a];
+        let origin_position = g.origin[a] * m_unit;
 
         // If the computed axis is marked as wrapped
         // for example if represents cyllinder where only x axis is wrapped
