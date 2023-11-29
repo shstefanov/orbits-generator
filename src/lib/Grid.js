@@ -76,6 +76,15 @@ class Grid {
     // }, 0);
     // const old_m_unit = math.divide(math.sqrt(semi_diagonal_length), 100);
 
+    this.dimmensions = Object.keys(this.bounds).sort();
+    this.dimmensions_reversed = this.dimmensions.slice().reverse();
+
+    this.offsets = {}; let current = 1;
+    for (let d of this.dimmensions){
+      this.offsets[d] = current;
+      current *= (this.bounds[d][1] - this.bounds[d][0] + 1);
+    }
+
     this.m_unit = Math.max(...Object.keys(this.bounds).map( d => {
       return math.divide(  this.bounds[d][1] - this.bounds[d][0], 200);
     }));
@@ -90,6 +99,43 @@ class Grid {
 
   get wrap(){ return this._wrap; }
   set wrap(w){ this._wrap = [...w]; }
+
+
+  getShapeIndex(p){
+    let index = 0;
+    for (let d of this.dimmensions){
+      const d_i = (p[d] - this.bounds[d][0]);
+      index += d_i * this.offsets[d];
+    }
+    return index;
+  }
+
+  pointFromIndex(index){
+    const p = {};
+    for(let d of this.dimmensions_reversed){
+      const m = index - (index % this.offsets[d]);
+      p[d] = m / this.offsets[d] + this.bounds[d][0];
+      index -= m;
+    }
+    return p;
+  }
+
+  get(p){
+    return this.shape[this.getShapeIndex(p)] || 0;
+  }
+
+  computeShape(){
+    let length = 1;
+    for(let d of this.dimmensions){
+      const [ from, to ] = this.bounds[d];
+      length *= (to - from + 1);
+    }
+    this.shape = new Array(length);
+    for(let i = 0; i < length; i++){
+      const value = this.gradientValueAt(this.pointFromIndex(i));
+      if(value > 0) this.shape[i] = value;
+    }
+  }
 
   in(p){
     const { bounds } = this;
@@ -233,50 +279,60 @@ class Grid {
     return value;
   }
 
-  map({ block_size, point, radius, blockSequence, sequenceValue, createItem }){
-    // Determine bounding box in blocks
-    // get 2 points for the box
-    const axes = Object.keys(this.bounds);
 
-    const min_block_values = axes.map( axis => math.getBlockBase((point[axis] || 0) - radius, block_size) );
-    const max_block_values = axes.map( axis => math.getBlockBase((point[axis] || 0) + radius, block_size) );
-
-    // Transform array values to points
-    const min_block_point = arrayToPoint(axes, min_block_values);
-    const max_block_point = arrayToPoint(axes, max_block_values);
-
-    const blocks = fillBlocks(axes, block_size, min_block_point, max_block_point)
-    // Filter blocks that are outside radius
-      .filter( block => blockBounds(axes, block_size, block).some( p => inRadius( axes, p, point, radius )));
-
+  map(fn){
     const result = [];
-
-    for(let block of blocks){
-
-      const sequence = blockSequence(block);
-
-      const block_bounds = blockBounds(axes, block_size, block);
-      const block_begin  = block_bounds[0];
-      const block_end    = block_bounds.pop();
-
-      const points = fillBlocks(axes, 1, block_begin, block_end);
-
-      for(let p of points){
-        // The entire block needs to be generated first, then
-        // decide if we should process the values
-        const gv = this.gradientValueAt(p);
-        const sv = sequenceValue(sequence);
-        if(this.in(p) && inRadius(axes, p, point, radius)){
-          const item = createItem(p, gv, sv);
-          if(item) result.push(item);
-        }
-      }
-
-    }
-
+    this.shape.map( (v, i) => {
+      const r = fn(v, this.pointFromIndex(i));
+      r !== undefined ? result.push(r): null;
+    });
     return result;
-
   }
+
+  // map({ block_size, point, radius, blockSequence, sequenceValue, createItem }){
+  //   // Determine bounding box in blocks
+  //   // get 2 points for the box
+  //   const axes = Object.keys(this.bounds);
+
+  //   const min_block_values = axes.map( axis => math.getBlockBase((point[axis] || 0) - radius, block_size) );
+  //   const max_block_values = axes.map( axis => math.getBlockBase((point[axis] || 0) + radius, block_size) );
+
+  //   // Transform array values to points
+  //   const min_block_point = arrayToPoint(axes, min_block_values);
+  //   const max_block_point = arrayToPoint(axes, max_block_values);
+
+  //   const blocks = fillBlocks(axes, block_size, min_block_point, max_block_point)
+  //   // Filter blocks that are outside radius
+  //     .filter( block => blockBounds(axes, block_size, block).some( p => inRadius( axes, p, point, radius )));
+
+  //   const result = [];
+
+  //   for(let block of blocks){
+
+  //     const sequence = blockSequence(block);
+
+  //     const block_bounds = blockBounds(axes, block_size, block);
+  //     const block_begin  = block_bounds[0];
+  //     const block_end    = block_bounds.pop();
+
+  //     const points = fillBlocks(axes, 1, block_begin, block_end);
+
+  //     for(let p of points){
+  //       // The entire block needs to be generated first, then
+  //       // decide if we should process the values
+  //       const gv = this.gradientValueAt(p);
+  //       const sv = sequenceValue(sequence);
+  //       if(this.in(p) && inRadius(axes, p, point, radius)){
+  //         const item = createItem(p, gv, sv);
+  //         if(item) result.push(item);
+  //       }
+  //     }
+
+  //   }
+
+  //   return result;
+
+  // }
 
 }
 
