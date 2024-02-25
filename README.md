@@ -145,8 +145,15 @@ sequence.matchRow(length, options)
     // Optional - helps for shaping the grid across it's volume
     gradient: [
       {
+        // Axes that will be affected by rule
         axis:   ["x", "y"],
+
+        // not coordinates, but "m_units",
+        // means percents of falf (radius)
+        // of widest of all grid sides.
+        // Only affected by 'axis' attribute
         origin: { x: 85, y: 85 },
+        
         values: {
           // The key in this schema (gradient waypoints) represents
           // unit, which is ~1/100 of biggest dimmension size / 2
@@ -158,7 +165,27 @@ sequence.matchRow(length, options)
           10: 90,
           40: 0
         }
-      }
+      },
+
+      // Next rule - will merge with the value of 
+      // previous rule while computing the value of
+      // specific point
+      {
+        axis:   [ "x" ],
+        origin: { x: 10 },
+        value: {
+          0: 0, 10: 50, 60: 50, 65: 0 
+        },
+
+        // If point does not have positive value by applying
+        // this and previus rules, break: true will reset value
+        // to initial 0 and will continue to match next groups of rules.
+        // If value is positive, sets the value for this point
+        // and breaks, not checking other rules.
+        break: true, 
+      },
+
+      // ... More rules and groups of rules here
     ]
   });
 ```
