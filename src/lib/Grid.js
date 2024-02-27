@@ -222,6 +222,31 @@ class Grid {
 
   // TODO: implement:
   // normalize(point) - normalize point position according to wrap
+  normalize(p){
+    const result = {};
+    for(let d in p){
+      if(p[d] < this.bounds[d][0] || p[d] > this.bounds[d][1]){
+        if(this.wrap.indexOf(d) === -1) return null;
+        else {
+          const size = this.bounds[d][1] - this.bounds[d][0] + 1;
+          if(p[d] > this.bounds[d][1]){
+            const pos  = p[d] - this.bounds[d][0];
+            result[d]  = this.bounds[d][0] + (pos % size);
+          }
+          else{
+            const pos  = this.bounds[d][1] - p[d];
+            result[d]  = this.bounds[d][1] - (pos % size);
+          }
+          // result[d] = p[d] < this.bounds[d][0]
+          //   ?  1
+          //   : -1;
+            continue;
+        }
+      }
+      else result[d] = p[d];
+    }
+    return result;
+  }
 
 
   // Methods that work with this.shape

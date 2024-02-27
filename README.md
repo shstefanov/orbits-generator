@@ -202,3 +202,18 @@ grid.gradientValueAt(point)
 ```javascript
   grid.gradientValueAt({x: 60, y: 40}); // -> 21
 ```
+
+grid.normalize(point)
+if point is outside bounds, normalize position to match
+actual inside position, depending on "wrap" parameters
+```javascript
+  // if bounds are x: [-5, 5], y: [-5, 5], z: [-5, 5]
+  // and if wrap is ["y", "z"]
+
+  // resolves as {x:1,y: 1,z: 1}
+  grid.normalize( {x: 1, y:-10,z:-10 });
+
+  // resolves as null as "x" axis is not wrapped
+  // and cannot be normalized to inside value
+  grid.normalize( {x:10, y: 0, z:  0 }));
+```
