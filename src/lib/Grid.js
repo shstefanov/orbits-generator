@@ -255,7 +255,7 @@ class Grid {
   }
 
   computeShape(){
-    const shape = this.shape;
+    const shape = this.shape, length = this.#shape_length;
     for(let i = 0; i < length; i++){
       const value = this.gradientValueAt(this.pointFromIndex(i));
       if(value > 0) shape[i] = value;
