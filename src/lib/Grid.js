@@ -90,6 +90,7 @@ class Grid {
 
   gradientValueAt(p){
     let value = 0;
+    const values = [];
 
     const { bounds, gradient, m_unit, wrap } = this;
 
@@ -206,18 +207,14 @@ class Grid {
       }
 
       if(g.break){
-        
-        // It has "break: true", so it is a complete shape
-        if(value > 0) return value;
-
-        // Reset - will match next meaningfull group
-        else value = 0;
+        values.push(value);
+        value = 0;
       }
      
 
     }
 
-    return value;
+    return Math.max(0, ...values);
   }
 
   // TODO: implement:
