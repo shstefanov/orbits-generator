@@ -144,6 +144,7 @@ class Grid {
         .map( n => parseInt(n) )
         .sort( (a, b) => a - b);
 
+      // The keys of gradient rule sorted and squared
       const gm_units_sq = g_waypoints.map( n => {
         const sq_value = ((n * m_unit) * (n * m_unit)); // ?? * g.axis.length
         return sq_value;
@@ -188,14 +189,14 @@ class Grid {
         const val_end   = g.values[wp_end];   // 0
 
         const val_gap = val_end - val_begin; // -100
-        const val_step = math.divide(val_gap, wp_steps);  // 100 / 1 = 100
+        const val_step = math.divide(val_gap * 1000, wp_steps);  // 100 / 1 = 100
 
         let count = 0;
         let match = 0;
         for(let i = wp_begin; i < wp_end; i++){ // 12 - 13
           count++;
           const step_sq = (i * m_unit) * (i * m_unit) ; // ??? * g.axis.length
-          const v = val_begin + (count * val_step );
+          const v = val_begin + math.divide(count * val_step, 1000 );
           if(step_sq >= d_sq){
             match = v;
             break;
