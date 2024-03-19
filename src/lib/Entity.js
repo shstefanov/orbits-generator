@@ -9,6 +9,10 @@ class Entity {
     this.attributes = { ...this.defaultProps, ...attributes };
   }
 
+  get hash(){
+    return this.createSequence(`${this.seed}-${initialHash}`).pool;
+  }
+
   // Abstract, should inherit
   get defaultProps() {
     throw new Error(`Error: 'defaultProps' getter of class '${this.constructor.name}' not implemented`);

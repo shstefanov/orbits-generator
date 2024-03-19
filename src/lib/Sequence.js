@@ -17,9 +17,9 @@ class Sequence {
   updatePool(){
     const str = [
       "$$namespace: " + this.namespace,
-      "$$seq: "       + this.seq,
+      "$$seed: "      + this.target.seed,
+      "$$seq: "       + this.seq++,
     ].join("\n") + this.state;
-    this.seq++;
     this.pool += md5(str);
   }
 
