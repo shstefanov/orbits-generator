@@ -1,17 +1,15 @@
 const { md5 } = require("./math");
 
-
 class Sequence {
 
   constructor(namespace, target){
     if(!target) throw new Error("Target argument of Sequence#constructor is required");
+    this.target    = target;
     this.namespace = namespace;
-    this.state = target.toString();
-    this.seq = 0;
-    this.pool = "";
+    this.state     = target.toString();
+    this.seq       = 0;
+    this.pool      = "";
     this.updatePool();
-
-
   }
 
   updatePool(){
