@@ -10,7 +10,7 @@ class Entity {
   }
 
   get hash(){
-    return this.createSequence(`${this.seed}-${initialHash}`).pool;
+    return this.createSequence(`${this.seed}-initialHash`).pool;
   }
 
   // Abstract, should inherit
