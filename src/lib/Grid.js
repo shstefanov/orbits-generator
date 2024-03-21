@@ -8,13 +8,7 @@ class Grid {
     this.gradient = gradient;
     this.wrap     = wrap;
 
-    // Computing m_unit - virtual unit, representing approximation of
-    // 1/100 of radius of bounding sphere of the box
-    // const semi_diagonal_length = Object.keys(bounds).reduce( (memo, key) => {
-    //   const axis_r = math.divide( this.bounds[key][1] - this.bounds[key][0], 2 );
-    //   return memo + (axis_r * axis_r);
-    // }, 0);
-    // const old_m_unit = math.divide(math.sqrt(semi_diagonal_length), 100);
+
 
     this.dimmensions = Object.keys(this.bounds).sort();
     this.dimmensions_reversed = this.dimmensions.slice().reverse();
@@ -36,6 +30,8 @@ class Grid {
       current *= (this.bounds[d][1] - this.bounds[d][0] + 1);
     }
 
+    // Computing m_unit - virtual unit, representing approximation of
+    // 1/200 of biggest dimmension
     this.m_unit = Math.max(...Object.keys(this.bounds).map( d => {
       return math.divide( this.bounds[d][1] - this.bounds[d][0], 200 );
     }));
@@ -221,8 +217,6 @@ class Grid {
     return Math.max(0, ...values);
   }
 
-  // TODO: implement:
-  // normalize(point) - normalize point position according to wrap
   normalize(p){
     const result = {};
     for(let d in p){
@@ -238,10 +232,6 @@ class Grid {
             const pos  = this.bounds[d][1] - p[d];
             result[d]  = this.bounds[d][1] - (pos % size);
           }
-          // result[d] = p[d] < this.bounds[d][0]
-          //   ?  1
-          //   : -1;
-            continue;
         }
       }
       else result[d] = p[d];
