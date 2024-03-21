@@ -14,7 +14,8 @@ describe("Grid.gradient (nowrap)", () => {
             0:  100,
             10: 90,
             40: 0,
-          }
+          },
+          break: true
 
         }
       ]
@@ -36,7 +37,8 @@ describe("Grid.gradient (nowrap)", () => {
         {
           axis:   ["x", "y"],
           origin: { x: 70, y: 70 },
-          values: { 0:  100, 10: 90, 40: 0 }
+          values: { 0:  100, 10: 90, 40: 0 },
+          break: true
         }
       ]
     });
@@ -87,7 +89,8 @@ describe("Grid.gradient (nowrap)", () => {
         {
           axis:   ["x", "y", "z"],
           origin: { x: 30, y: 30, z: 30 },
-          values: { 0:  100, 10: 90, 40: 0 }
+          values: { 0:  100, 10: 90, 40: 0 },
+          break: true
         }
       ]
     });

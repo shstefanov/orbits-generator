@@ -4,7 +4,7 @@
   "description": "Generating random-like stuff using md5 sequences",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -b -p --recursive --bail --extension spec.js -- "
+    "test": "mocha -b -p --recursive --bail --extension spec.js "
   },
   "repository": {
     "type": "git",

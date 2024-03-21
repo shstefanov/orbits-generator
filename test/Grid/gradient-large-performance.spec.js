@@ -15,7 +15,8 @@ describe("Grid.gradient (large - performance)", () => {
             0:  100,
             10: 90,
             40: 0,
-          }
+          },
+          break: true
 
         }
       ]
@@ -24,7 +25,6 @@ describe("Grid.gradient (large - performance)", () => {
     for(let x = -2000000; x < 2000000; x+=200000){
       result.push(grid.gradientValueAt({ x }));
     }
-
     deepEqual(
       [42,12,0,0,0,0,0,0,0,0,0,0,0,0,12,42,72,94,94,72],
       result
@@ -39,7 +39,8 @@ describe("Grid.gradient (large - performance)", () => {
         {
           axis:   ["x", "y"],
           origin: { x: 75, y: 75 },
-          values: { 0:  100, 10: 90, 40: 0 }
+          values: { 0:  100, 10: 90, 40: 0 },
+          break:  true
         }
       ]
     });
@@ -52,6 +53,8 @@ describe("Grid.gradient (large - performance)", () => {
         row.push(grid.gradientValueAt({ x, y }));
       }
     }
+
+    // return console.log(JSON.stringify(result));
 
     deepEqual([
       [9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,27,39,39,27],
@@ -73,7 +76,7 @@ describe("Grid.gradient (large - performance)", () => {
       [27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,51,69,69,51],
       [39,9,0,0,0,0,0,0,0,0,0,0,0,0,9,39,69,91,91,69],
       [39,9,0,0,0,0,0,0,0,0,0,0,0,0,9,39,69,91,91,69],
-      [27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,51,69,69,51],
+      [27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,51,69,69,51]
     ], result);
 
   });
@@ -88,7 +91,8 @@ describe("Grid.gradient (large - performance)", () => {
         {
           axis:   ["x", "y", "z"],
           origin: { x: 90, y: 90, z: 90 },
-          values: { 0:  100, 10: 90, 40: 0 }
+          values: { 0:  100, 10: 90, 40: 0 },
+          break:  true,
         }
       ]
     });

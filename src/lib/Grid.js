@@ -25,6 +25,11 @@ class Grid {
       this.#shape_length *= (to - from + 1);
     }
 
+    this.middle = {};
+    for(let b in bounds) {
+      this.middle[b] = math.divide(bounds[b][1] + bounds[b][0], 2);
+    }
+
     this.offsets = {}; let current = 1;
     for (let d of this.dimmensions){
       this.offsets[d] = current;
@@ -92,7 +97,7 @@ class Grid {
     let value = 0;
     const values = [];
 
-    const { bounds, gradient, m_unit, wrap } = this;
+    const { bounds, gradient, m_unit, wrap, middle } = this;
 
     // Processing one or more gradient points
     // Each gradient object has:
@@ -105,6 +110,7 @@ class Grid {
     //   // values are number to add
     //   values: { 0:  100, 10: 90, 40: 0 },
     // }
+
     for(let g of gradient){
       // 1. Find distance squared
       let d_sq = 0;
@@ -112,7 +118,7 @@ class Grid {
       // Computing only gradient axes, the rest axes of grid are skipped
       for(let a of g.axis) {
 
-        let origin_position = g.origin[a] * m_unit;
+        let origin_position = (g.origin[a] * m_unit) + middle[a];
 
         // If the computed axis is marked as wrapped
         // for example if represents cyllinder where only x axis is wrapped
@@ -146,7 +152,7 @@ class Grid {
 
       // The keys of gradient rule sorted and squared
       const gm_units_sq = g_waypoints.map( n => {
-        const sq_value = ((n * m_unit) * (n * m_unit)); // ?? * g.axis.length
+        const sq_value = ((n * m_unit) * (n * m_unit));
         return sq_value;
       });
 
@@ -175,21 +181,18 @@ class Grid {
         }
       }
 
-
       if(left === right) {
         value += g.values[g_waypoints[left]];
-        // continue;
       }
       else {
-        const wp_begin = g_waypoints[left];  // 12
-        const wp_end = g_waypoints[right];   // 13
-        const wp_steps = wp_end - wp_begin;  // 1
+        const wp_begin = g_waypoints[left];
+        const wp_end   = g_waypoints[right];
+        const wp_steps = wp_end - wp_begin;
 
-        const val_begin = g.values[wp_begin]; // 100
-        const val_end   = g.values[wp_end];   // 0
-
-        const val_gap = val_end - val_begin; // -100
-        const val_step = math.divide(val_gap * 1000, wp_steps);  // 100 / 1 = 100
+        const val_begin = g.values[wp_begin];
+        const val_end   = g.values[wp_end];
+        const val_gap   = val_end - val_begin;
+        const val_step  = math.divide(val_gap * 1000, wp_steps);
 
         let count = 0;
         let match = 0;
@@ -197,6 +200,7 @@ class Grid {
           count++;
           const step_sq = (i * m_unit) * (i * m_unit) ; // ??? * g.axis.length
           const v = val_begin + math.divide(count * val_step, 1000 );
+          //             i 10 1 100 87
           if(step_sq >= d_sq){
             match = v;
             break;
@@ -214,7 +218,6 @@ class Grid {
      
 
     }
-
     return Math.max(0, ...values);
   }
 

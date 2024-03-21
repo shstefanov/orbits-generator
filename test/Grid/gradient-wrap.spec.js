@@ -15,7 +15,8 @@ describe("Grid.gradient (wrap)", () => {
             0:  100,
             10: 90,
             40: 0,
-          }
+          },
+          break: true,
 
         }
       ]
@@ -38,8 +39,10 @@ describe("Grid.gradient (wrap)", () => {
         {
           axis:   ["x", "y"],
           origin: { x: 85, y: 85 },
-          values: { 0:  100, 10: 90, 40: 0 }
-        }
+          values: { 0:  100, 10: 90, 40: 0 },
+          break: true
+        },
+        
       ]
     });
 
@@ -90,8 +93,10 @@ describe("Grid.gradient (wrap)", () => {
         {
           axis:   ["x", "y", "z"],
           origin: { x: 90, y: 90, z: 90 },
-          values: { 0:  100, 10: 90, 40: 0 }
-        }
+          values: { 0:  100, 10: 90, 40: 0 },
+          break: true
+        },
+        
       ]
     });
 

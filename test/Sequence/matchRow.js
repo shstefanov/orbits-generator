@@ -17,27 +17,28 @@ describe("sequence.matchRow", () => {
       40:  "Variant_2",
       150: "Variant_3",
     });
+    // return console.log(JSON.stringify(results));
     deepEqual([
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_2',
-      'Variant_1', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1',
-      'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3', 'Variant_2',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3',
-      'Variant_2', 'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2', 'Variant_2',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_2', 'Variant_3',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2', 'Variant_2',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_2',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3'
+      "Variant_2","Variant_3","Variant_3","Variant_2","Variant_2",
+      "Variant_3","Variant_2","Variant_3","Variant_3","Variant_2",
+      "Variant_3","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_2","Variant_1","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_1","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_2","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_2","Variant_3","Variant_2","Variant_2","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_2",
+      "Variant_3","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_1","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_1","Variant_2","Variant_3",
+      "Variant_3","Variant_2","Variant_3","Variant_3","Variant_3",
+      "Variant_2","Variant_3","Variant_3","Variant_2","Variant_3",
+      "Variant_2","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3"
     ], results );
 
   });

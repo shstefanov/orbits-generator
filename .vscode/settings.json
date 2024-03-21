@@ -26,7 +26,7 @@
 
     "editor.renderWhitespace": "selection",
 
-    "editor.fontFamily":  "",
+    // "editor.fontFamily":  "",
     "editor.fontSize":    12,
     "editor.lineHeight":  14,
     "editor.lineNumbers": "on",

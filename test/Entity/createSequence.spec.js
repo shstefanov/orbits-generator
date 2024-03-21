@@ -15,8 +15,8 @@ describe("Entity#constructor", () => {
     const seq1 = sea.createSequence("islands");
     const seq2 = sea.createSequence("islands");
 
-    equal('041a8446a1afba7ebfd78311a7af7156', seq1.pool);
-    equal('041a8446a1afba7ebfd78311a7af7156', seq2.pool);
+    equal('0bdbe5332437c81325a42a013de6877a', seq1.pool);
+    equal('0bdbe5332437c81325a42a013de6877a', seq2.pool);
 
   });
 

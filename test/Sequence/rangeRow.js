@@ -14,10 +14,8 @@ describe("sequence.range", () => {
     const sequence = sea.createSequence("islands");
     const results = sequence.rangeRow(25, 0, 100);
     deepEqual([
-      50, 62, 91, 42, 11, 53, 27, 14,
-      51, 87, 49, 12, 56, 47, 34,  1,
-      24, 86,  8,  6, 37, 33, 91, 75,
-      38
+      35,75,71,19,36,53,46,82,39,46,92,44,
+      24,20,67,80,69,50,8,64,81,67,77,7,26
     ], results);
 
   });

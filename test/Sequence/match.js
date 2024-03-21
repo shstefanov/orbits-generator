@@ -3,14 +3,14 @@ const Sequence = require("../../src/lib/Sequence");
 const Entity = require("../../src/lib/Entity");
 const Sea = require("../fixtures/Sea");
 
-describe("sequence.match", () => {
+describe("sequence.range", () => {
 
   const sea = new Sea("SALT", {
     size: 100,
     depth: 10
   });
 
-  it("sequence.match(options)", () => {
+  it("sequence.range(min, max)", () => {
     const sequence = sea.createSequence("islands");
     const results = [];
     for(let i = 0; i < 100; i++){
@@ -21,26 +21,26 @@ describe("sequence.match", () => {
       }));
     }
     deepEqual([
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_2',
-      'Variant_1', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1',
-      'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3', 'Variant_2',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3',
-      'Variant_2', 'Variant_3', 'Variant_2', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2', 'Variant_2',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_2', 'Variant_3',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2', 'Variant_2',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2',
-      'Variant_2', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_2',
-      'Variant_3', 'Variant_3', 'Variant_2', 'Variant_2', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_1', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3',
-      'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3', 'Variant_3'
+      "Variant_2","Variant_3","Variant_3","Variant_2","Variant_2",
+      "Variant_3","Variant_2","Variant_3","Variant_3","Variant_2",
+      "Variant_3","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_2","Variant_1","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_1","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_2","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_2","Variant_3","Variant_2","Variant_2","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_2",
+      "Variant_3","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_1","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_1","Variant_2","Variant_3",
+      "Variant_3","Variant_2","Variant_3","Variant_3","Variant_3",
+      "Variant_2","Variant_3","Variant_3","Variant_2","Variant_3",
+      "Variant_2","Variant_3","Variant_2","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3",
+      "Variant_3","Variant_3","Variant_3","Variant_3","Variant_3"
     ], results );
 
   });

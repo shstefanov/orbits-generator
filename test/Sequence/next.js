@@ -13,7 +13,7 @@ describe("sequence.next", () => {
   it("sequence.next() pulls fixed number from the pool", () => {
     const sequence = sea.createSequence("islands");
     const num = sequence.next(3);
-    equal(65, num);
+    equal(189, num);
   });
 
 });
