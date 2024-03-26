@@ -5,25 +5,18 @@ const math = module.exports = {
   },
 
   sqrt: function (s){
-    let x0 = math.divide(s, 2); //s / 2;            // Initial estimate
+    let x0 = math.divide(s, 2); // Initial estimate
     // Avoid overflow when s is the maximum representable value
-
     // Sanity check
-    if ( x0 != 0 )
-    {
-      let x1 = math.divide( x0 + math.divide(s, x0), 2 ); // / 2;  // Update
-
-      while ( x1 < x0 )               // This also checks for cycle
-      {
+    if ( x0 != 0 ) {
+      let x1 = math.divide( x0 + math.divide(s, x0), 2 ); // Update
+      while ( x1 < x0 ) {             // This also checks for cycle
         x0 = x1;
         x1 = math.divide( x0 + math.divide(s, x0), 2 );
       }
       return x0;
     }
-    else
-    {
-      return s;
-    }
+    else return s;
   },
 
   distanceSquared(p1, p2){
@@ -81,9 +74,15 @@ const math = module.exports = {
 
   // Returns the beginning value of block by given block_size
   // and axis value n
-  getBlockBase: function(n, block_size){
+  getAxisBase: function(n, block_size){
     if( n < 0 ) n -= (block_size - 1);
     return n - (n % block_size);
+  },
+
+  getBlockBase: function (point, block_size){
+    const base = {};
+    for(let a in point) base[a] = math.getAxisBase(point[a], block_size);
+    return base;
   }
 
 
