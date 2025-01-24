@@ -11,7 +11,7 @@
     "url": "https://github.com/shstefanov/orbits-generator.git"
   },
   "devDependencies": {
-    "mocha": "^9.2.2"
+    "mocha": "^11.1.0"
   },
   "keywords": ["generator"],
   "author": "Stefan Stefanov <s.h.stefanov@mail.bg>",
