@@ -37,16 +37,13 @@ class Sequence {
       const needs = strlen - pool_length;
       const rest = needs % 32;
       const updates = ( (needs - rest) / 32 ) + (rest ? 1 : 0);
-      for(let i = 0; i < updates; i++){
-        this.updatePool();
-      }
+      for(let i = 0; i < updates; i++) this.updatePool();
     }
     const _row_pool = this.pool.slice(0, strlen);
     this.pool = this.pool.slice(strlen);
     const numbers = [];
-    for(let i = 0; i < length; i++){
-      const str = _row_pool.substr( i * digits, digits );
-      numbers.push(parseInt("0x" + str));
+    for(let i = 0, start = 0, end = start + digits; i < length; i++, start = i * digits, end = start + digits){
+      numbers.push( parseInt( "0x" +  _row_pool.slice( start, end ) ) );
     }
     return numbers;
   }

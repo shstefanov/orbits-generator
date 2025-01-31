@@ -32,6 +32,7 @@ describe("Entity#toString", () => {
       toString(){
         return [
           `$seed: ${this.seed}`,
+          `$hash: ${this.hash}`,
           `aa: ${this.attributes.aa}`,
           `value_1: ${this.attributes.value_1}`,
           `value_2: ${this.attributes.value_2}`,
@@ -43,12 +44,13 @@ describe("Entity#toString", () => {
       value_2: 23,
     });
 
-    equal(entity.toString(), [
+    equal([
       "$seed: 123",
+      "$hash: 6b9b42fb790b3400545009706c70a870",
       "aa: 55",
       "value_1: 12",
       "value_2: 23",
-    ].join("\n"));
+    ].join("\n"), entity.toString() );
   });
 
 });

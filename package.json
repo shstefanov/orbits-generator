@@ -1,6 +1,6 @@
 {
   "name": "@orbits/generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generating random-like stuff using md5 sequences",
   "main": "index.js",
   "scripts": {

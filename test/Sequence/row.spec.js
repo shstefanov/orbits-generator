@@ -10,7 +10,7 @@ describe("sequence.row", () => {
 		depth: 10
 	});
 
-	it("sequence.next() pulls fixed number from the pool", () => {
+	it("sequence.row() pulls list of fixed digits numbers from the pool", () => {
 		const sequence = sea.createSequence("islands");
 		const n = sequence.next(3); // cut some of the pool
 		const row = sequence.row(25, 4);

@@ -40,7 +40,7 @@
 
 # Sequence
 
-Sequence object is designed to represent endless hex hash string. If you keep the input same input and apply same operations in same
+Sequence object is designed to represent endless hex hash string. If you keep the same input and apply same operations in same
 order, you will always get same outputs.
 
 
@@ -126,8 +126,9 @@ sequence.matchRow(length, options)
 ```javascript
   const grid = sea.createGrid({
     bounds: {
-      x: [-100, 100],
-      y: [-100, 100]
+      x: [-100, 100], // Important: Please, use integers and start < end
+      y: [-100, 100],
+      
       // Describe dimmensions of the grid
       // Any number and names can be used
       // Valid schema:
@@ -135,6 +136,10 @@ sequence.matchRow(length, options)
       // latitude:  [ -90,  90  ],
       // height:    [ -11000, 9000 ],
       // But all grid queries should match dimmensions schema
+
+      // Important: Internal representation of the grid is flat array
+      // So the 'volume'( dimmension_1_size * dimmension_2_size * dimmension_3_size ... etc)
+      // cannot be more than 4294967295 ( ~ 1625 ^ 3 ) which is the maximu size of array in JavaScript
     },
 
     // Optional: determines if some of dimmensions "wraps",
@@ -149,7 +154,7 @@ sequence.matchRow(length, options)
         axis:   ["x", "y"],
 
         // not coordinates, but "m_units",
-        // means percents of falf (radius)
+        // means percents of half (radius)
         // of widest of all grid sides.
         // Only affected by 'axis' attribute
         origin: { x: 85, y: 85 },
@@ -217,3 +222,40 @@ actual inside position, depending on "wrap" parameters
   // and cannot be normalized to inside value
   grid.normalize( {x:10, y: 0, z:  0 }));
 ```
+
+
+grid.fill()
+```javascript
+  // Loops trough all cells of the grid and sets the values you return to
+  // internal cells array. If undefined is return, the cell will remain empty
+  grid.fill( function(cell_coordinates, gradient_value){
+    // cell_coordinates are in form: { x: 5, y: -2 }, { longitude: 20, latitude: 11 }
+    // Depending of how bounds are defined
+
+    // gradient_value is value, the sum of matched influencing gradient rules
+
+    // return whatever you want to be at this position or undefined to leave te cell empty
+  });
+```
+
+
+grid.map()
+```javascript
+  // Important: I grid.fill had not been called, this will do nothing
+  // Loops trough all non-empty cells and produces array with returned non-undefined returns
+  grid.map( function(cell_content, cell_coordinates){
+
+    // cell_content is the non-undefined result produced by grid.fill() for this cell
+
+    // cell_coordinates are in form: { x: 5, y: -2 }, { longitude: 20, latitude: 11 }
+    // Depending of how bounds are defined
+
+    // return whatever you want to be at this position or undefined to omit this cell from results
+  });
+```
+
+
+
+
+
+

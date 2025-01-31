@@ -264,7 +264,7 @@ class Grid {
 
   fill(fn){
     const shape = this.shape, length = this.#shape_length;
-    for(let i =0; i < length; i++){
+    for(let i = 0; i < length; i++){
       const p = this.pointFromIndex(i);
       const r = fn(p, this.gradientValueAt(p));
       if(r === undefined) continue;

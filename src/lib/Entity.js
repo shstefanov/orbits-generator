@@ -6,11 +6,13 @@ class Entity {
   
   constructor(seed, attributes){
     this.seed = seed;
-    this.attributes = { ...this.defaultProps, ...attributes };
+    this.attributes = Object.freeze({ ...this.defaultProps, ...attributes });
+    this.hash = seed + this.toString(); // Temporary pseudo hash
+    this.hash = this.createHash();
   }
 
-  get hash(){
-    return this.createSequence(`${this.seed}-initialHash`).pool;
+  createHash(){
+    return this.createSequence(`__InitialHash__\n${this}`).pool;
   }
 
   // Abstract, should inherit
@@ -19,7 +21,7 @@ class Entity {
   }
 
   toString(){
-    return [`$seed: ${this.seed}`]
+    return [`$seed: ${this.seed}`, `$hash: ${this.hash}`]
       .concat(Object.keys(this.attributes).sort().map( a => `${a}: ${this.attributes[a]}`))
       .join("\n");
   }
